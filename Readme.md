@@ -38,8 +38,8 @@
 
 # Scripts
 
-    1.for testing using jasmine `db-migrate --env dev reset && db-migrate --env dev up && npm run build && jasmine `
-    2.for starting server with express `nodemon src/server.ts`
+    1.for testing using jasmine `npm run test `
+    2.for starting server with express `npm run start`
 
 # Database
 
