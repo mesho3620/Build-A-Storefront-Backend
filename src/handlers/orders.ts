@@ -36,10 +36,31 @@ const create = async (req: Request, res: Response) => {
     const o: order = {
       id: req.body.id,
       user_id: req.body.user_id,
-      product_id: req.body.product_id,
       status: req.body.status,
     };
     const neworder = await ordersService.create(o);
+    res.json(neworder);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+
+const addProduct = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization as string;
+    const token = authorizationHeader.split(" ")[1];
+    jwt.verify(token, process.env.TOKEN_SECRET as string);
+  } catch (error) {
+    res.status(401);
+    res.json("Access Denied");
+    return;
+  }
+
+  try {
+    const orderID = req.body.order_id;
+    const productID = req.body.product_id;
+    const neworder = await ordersService.addProduct(orderID, productID);
     res.json(neworder);
   } catch (err) {
     res.status(400);
@@ -83,6 +104,7 @@ const ordersRoutes = (app: express.Application) => {
   app.get("/orders/search/", show);
   app.get("/orders", index);
   app.post("/orders", verifyAuthToken, create);
+  app.post("/orders/addProduct", verifyAuthToken, addProduct);
   app.delete("/orders", verifyAuthToken, destroyorder);
   app.get("orders/searchUserOrders", showUserOrders);
 };

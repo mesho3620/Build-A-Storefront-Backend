@@ -3,7 +3,6 @@ import Client from "../database";
 
 export type order = {
   id: number;
-  product_id: number;
   user_id: number;
   status: string;
 };
@@ -27,7 +26,9 @@ export class orders {
 
   async show(id: number): Promise<order> {
     try {
-      const sql = "SELECT * FROM orders WHERE id=($1)";
+      //      const sql = "SELECT * FROM orders WHERE id=($1)";
+      const sql =
+        "SELECT * FROM ((orders AS o JOIN order_products AS op ON o.id = op.order_ID) JOIN products AS p ON op.product_ID = p.id) WHERE o.id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -35,7 +36,7 @@ export class orders {
 
       conn.release();
 
-      return result.rows[0];
+      return result.rows;
     } catch (err) {
       throw new Error(`Could not find order ${id}. Error: ${err}`);
     }
@@ -51,7 +52,7 @@ export class orders {
 
       conn.release();
 
-      return result.rows[0];
+      return result.rows;
     } catch (err) {
       throw new Error(`Could not find order ${id}. Error: ${err}`);
     }
@@ -60,11 +61,11 @@ export class orders {
   async create(o: order): Promise<order> {
     try {
       const sql =
-        "INSERT INTO orders (product_ID, user_ID, Status) VALUES($1, $2, $3) RETURNING *";
+        "INSERT INTO orders ( user_ID, Status) VALUES($1, $2) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [o.product_id, o.user_id, o.status]);
+      const result = await conn.query(sql, [o.user_id, o.status]);
 
       const order = result.rows[0];
 
@@ -73,6 +74,30 @@ export class orders {
       return order;
     } catch (err) {
       throw new Error(`Could not add new order ${o.id}. Error: ${err}`);
+    }
+  }
+
+  async addProduct(oID: number, pID: number): Promise<order> {
+    try {
+      const sql =
+        "INSERT INTO order_Products ( order_ID, product_ID) VALUES($1, $2) RETURNING *";
+      const sql2 = "SELECT * FROM orders WHERE id= $1;";
+      // @ts-ignore
+      const conn = await Client.connect();
+      const result2 = await conn.query(sql2, [oID]);
+      if (result2.rows.length > 0) {
+        const result = await conn.query(sql, [oID, pID]);
+        const order = result.rows[0];
+
+        conn.release();
+
+        return order;
+      }
+      throw new Error(`Could not add product as order ${oID} does not exist`);
+    } catch (err) {
+      throw new Error(
+        `Could not add new product ${pID} to oder ${oID}. Error: ${err}`
+      );
     }
   }
 

@@ -26,6 +26,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Index
 - Show (args: product id)
 - Create (args: Product)[token required]
+- addProduct (args: OrderID,ProductID)[token required]
 - Delete (args: Product ID)[token required]
 - ShowUserOrders (args: user_id) [token required]
 
@@ -52,6 +53,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - `/orders/search/` => show => GET
 - `/orders` => destroyProduct => DELETE
 - `/orders` => create => POST
+- `/orders/addProduct` => addProduct => POST
 - `orders/searchUserOrders` => showUserOrders => GET
 
 ## Data Shapes
