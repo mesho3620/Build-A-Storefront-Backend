@@ -21,13 +21,11 @@ describe("orders Model", () => {
 
   it("create method should add a order", async () => {
     const result = await testorder.create({
-      product_id: 1,
       user_id: 1,
       status: "active",
       id: 2,
     });
     expect(result).toEqual({
-      product_id: 1,
       user_id: 1,
       status: "active",
       id: 2,
@@ -38,7 +36,6 @@ describe("orders Model", () => {
     const result = await testorder.index();
     expect(result).toEqual([
       {
-        product_id: 1,
         user_id: 1,
         status: "active",
         id: 2,
@@ -49,7 +46,6 @@ describe("orders Model", () => {
   it("show method should return the correct order", async () => {
     const result = await testorder.show(2);
     expect(result).toEqual({
-      product_id: 1,
       user_id: 1,
       status: "active",
       id: 2,
