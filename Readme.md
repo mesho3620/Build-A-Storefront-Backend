@@ -92,7 +92,8 @@
 ### Create database
 
 ````CREATE DATABASE shopping;
-   CREATE DATABASE shopping_test;```
+   CREATE DATABASE shopping_test;
+```
 
 ### user privileges
 
