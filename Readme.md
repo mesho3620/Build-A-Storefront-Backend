@@ -91,12 +91,14 @@
 
 ### Create database
 
-````CREATE DATABASE shopping;
+```
+   CREATE DATABASE shopping;
    CREATE DATABASE shopping_test;
 ```
 
 ### user privileges
 
-```GRANT ALL PRIVILEGES ON shopping TO shopping_user;
+```
+   GRANT ALL PRIVILEGES ON shopping TO shopping_user;
    GRANT ALL PRIVILEGES ON shopping_test TO shopping_user;
-````
+```
