@@ -69,6 +69,10 @@
 
 > Port:3000
 
+## Database port
+
+> Port:5432
+
 ## Environment variables
 
 ```
@@ -77,7 +81,7 @@
   POSTGRES_DB=shopping
   POSTGRES_TEST_DB=shopping_test
   POSTGRES_PASSWORD=123
-  ENV=dev
+  ENV=test
   BCRYPT_PASSWORD=i-love-shopping
   SALT_ROUNDS=10
   TOKEN_SECRET=its-a-secret

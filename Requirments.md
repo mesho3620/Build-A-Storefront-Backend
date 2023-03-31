@@ -77,3 +77,12 @@ These are the notes from a meeting with the frontend developer that describe wha
 - id of each product in the order[foreign key to Product.id]
 - user_id [foreign key to User.id]
 - status of order (active or complete)
+
+## Daatabase schema
+
+![Screenshot](schema.PNG.png)
+![Screenshot](table1.png)
+![Screenshot](table2.png)
+![Screenshot](table3.png)
+![Screenshot](table4.png)
+![Screenshot](table5.png)

@@ -5,19 +5,29 @@ import jwt from "jsonwebtoken";
 const productsService = new products();
 
 const index = async (_req: Request, res: Response) => {
-  const p = await productsService.index();
-  res.json(p);
+  try {
+    const p = await productsService.index();
+    res.json(p);
+  } catch (error) {
+    res.status(400);
+    res.json(error);
+  }
 };
 
 const show = async (req: Request, res: Response) => {
-  const p = await productsService.show(req.body.id);
-  res.json(p);
+  try {
+    const p = await productsService.show(parseInt(req.params["id"]));
+    res.json(p);
+  } catch (error) {
+    res.status(400);
+    res.json(error);
+  }
 };
 
 const create = async (req: Request, res: Response) => {
   try {
     const p: product = {
-      id: req.body.id,
+      id: parseInt(req.params["id"]),
       name: req.body.name,
       price: req.body.price,
     };

@@ -5,20 +5,49 @@ import jwt from "jsonwebtoken";
 const usersService = new users();
 
 const index = async (_req: Request, res: Response) => {
-  const p = await usersService.index();
-  res.json(p);
+  try {
+    const authorizationHeader = _req.headers.authorization as string;
+    const token = authorizationHeader.split(" ")[1];
+    jwt.verify(token, process.env.TOKEN_SECRET as string);
+  } catch (error) {
+    res.status(401);
+    res.json("Access Denied");
+    return;
+  }
+
+  try {
+    const p = await usersService.index();
+    res.json(p);
+  } catch (error) {
+    res.status(400);
+    res.json(error);
+  }
 };
 
 const show = async (req: Request, res: Response) => {
-  const p = await usersService.show(req.body.id);
+  try {
+    const authorizationHeader = req.headers.authorization as string;
+    const token = authorizationHeader.split(" ")[1];
+    jwt.verify(token, process.env.TOKEN_SECRET as string);
+  } catch (error) {
+    res.status(401);
+    res.json("Access Denied");
+    return;
+  }
 
-  res.json(p);
+  try {
+    const p = await usersService.show(parseInt(req.params["id"]));
+    res.json(p);
+  } catch (error) {
+    res.status(400);
+    res.json(error);
+  }
 };
 
 const create = async (req: Request, res: Response) => {
   try {
     const u: user = {
-      id: req.body.id,
+      id: parseInt(req.params["id"]),
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       password: req.body.password,
@@ -36,6 +65,16 @@ const create = async (req: Request, res: Response) => {
 };
 
 const destroyuser = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization as string;
+    const token = authorizationHeader.split(" ")[1];
+    jwt.verify(token, process.env.TOKEN_SECRET as string);
+  } catch (error) {
+    res.status(401);
+    res.json("Access Denied");
+    return;
+  }
+
   try {
     const deleted = await usersService.delete(req.body.id);
     res.json(deleted);

@@ -5,20 +5,35 @@ import jwt from "jsonwebtoken";
 const ordersService = new orders();
 
 const index = async (_req: Request, res: Response) => {
-  const p = await ordersService.index();
-  res.json(p);
+  try {
+    const p = await ordersService.index();
+    res.json(p);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const show = async (req: Request, res: Response) => {
-  const p = await ordersService.show(req.body.id);
-
-  res.json(p);
+  try {
+    const p = await ordersService.show(parseInt(req.params["id"]));
+    res.json(p);
+  } catch (error) {
+    res.status(400);
+    res.json(error);
+  }
 };
 
 const showUserOrders = async (req: Request, res: Response) => {
-  const p = await ordersService.showUserOrders(req.body.user_id);
-
-  res.json(p);
+  try {
+    const p = await ordersService.showUserOrders(
+      parseInt(req.params["user_id"])
+    );
+    res.json(p);
+  } catch (error) {
+    res.status(400);
+    res.json(error);
+  }
 };
 
 const create = async (req: Request, res: Response) => {
@@ -34,8 +49,8 @@ const create = async (req: Request, res: Response) => {
 
   try {
     const o: order = {
-      id: req.body.id,
-      user_id: req.body.user_id,
+      id: parseInt(req.params["id"]),
+      user_id: parseInt(req.params["user_id"]),
       status: req.body.status,
     };
     const neworder = await ordersService.create(o);
@@ -101,8 +116,8 @@ const verifyAuthToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const ordersRoutes = (app: express.Application) => {
-  app.get("/orders/search/", show);
-  app.get("/orders", index);
+  app.get("/orders/search/", verifyAuthToken, show);
+  app.get("/orders", verifyAuthToken, index);
   app.post("/orders", verifyAuthToken, create);
   app.post("/orders/addProduct", verifyAuthToken, addProduct);
   app.delete("/orders", verifyAuthToken, destroyorder);
